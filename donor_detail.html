@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ donor.full_name }} - Donor Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'donor_list' %}" class="text-decoration-none text-muted">Donors</a></li>
+                    <li class="breadcrumb-item active text-danger" aria-current="page">{{ donor.full_name }}</li>
+                </ol>
+            </nav>
+
+            <div class="card card-custom overflow-hidden">
+                <!-- Header Banner -->
+                <div class="p-4 p-md-5 bg-light border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="blood-type-symbol p-3 bg-white rounded-4 shadow-sm border text-center" style="min-width: 80px;">
+                            {{ donor.blood_group }}
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h3 class="fw-bold mb-0 text-dark">{{ donor.full_name }}</h3>
+                                {% if donor.availability == 'Available' %}
+                                <span class="badge-available"><i class="bi bi-check-circle-fill"></i> Available</span>
+                                {% else %}
+                                <span class="badge-unavailable"><i class="bi bi-x-circle-fill"></i> Unavailable</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ donor.city }} &bull;
+                                <i class="bi bi-person-fill ms-2 me-1"></i>{{ donor.age }} Years Old ({{ donor.gender }})
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'donor_edit' donor.id %}" class="btn btn-outline-warning text-dark fw-semibold">
+                            <i class="bi bi-pencil-fill me-1"></i> Edit
+                        </a>
+                        <a href="{% url 'donor_delete' donor.id %}" class="btn btn-outline-danger fw-semibold">
+                            <i class="bi bi-trash-fill me-1"></i> Delete
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Detailed Information Grid -->
+                <div class="p-4 p-md-5">
+                    <h5 class="fw-bold text-dark mb-4 border-bottom pb-2">
+                        <i class="bi bi-person-lines-fill text-danger me-2"></i>Donor Information
+                    </h5>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Contact Phone</small>
+                                <a href="tel:{{ donor.phone }}" class="h6 fw-bold text-decoration-none text-dark">
+                                    <i class="bi bi-telephone-outbound-fill text-success me-2"></i>{{ donor.phone }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Email Address</small>
+                                <a href="mailto:{{ donor.email }}" class="h6 fw-bold text-decoration-none text-dark">
+                                    <i class="bi bi-envelope-fill text-primary me-2"></i>{{ donor.email }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Blood Group</small>
+                                <span class="h6 fw-bold text-danger">
+                                    <i class="bi bi-droplet-fill me-2"></i>{{ donor.blood_group }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Last Donation Date</small>
+                                <span class="h6 fw-bold text-dark">
+                                    <i class="bi bi-calendar-event me-2 text-secondary"></i>
+                                    {% if donor.last_donation_date %}
+                                    {{ donor.last_donation_date|date:"F d, Y" }}
+                                    {% else %}
+                                    First-time donor (No prior record)
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Residential Address</small>
+                                <p class="h6 fw-normal text-dark mb-0">
+                                    <i class="bi bi-house-door-fill text-secondary me-2"></i>{{ donor.address }}, {{ donor.city }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Member Since</small>
+                                <small class="text-dark fw-semibold">
+                                    <i class="bi bi-clock me-1 text-muted"></i>{{ donor.created_at|date:"d M Y, h:i A" }}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted text-uppercase fw-semibold d-block mb-1">Last Record Update</small>
+                                <small class="text-dark fw-semibold">
+                                    <i class="bi bi-arrow-repeat me-1 text-muted"></i>{{ donor.updated_at|date:"d M Y, h:i A" }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <a href="{% url 'donor_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Donors List
+                        </a>
+                        <a href="tel:{{ donor.phone }}" class="btn btn-success px-4">
+                            <i class="bi bi-telephone-fill me-1"></i> Call Donor
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

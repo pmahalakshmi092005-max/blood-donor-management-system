@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Blood Donor Availability Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Home</a></li>
+            <li class="breadcrumb-item active text-danger" aria-current="page">About Project</li>
+        </ol>
+    </nav>
+
+    <!-- Header Banner -->
+    <div class="card card-custom p-4 p-md-5 mb-4 text-center bg-white">
+        <div class="stat-icon red mx-auto mb-3" style="width: 70px; height: 70px; font-size: 2rem;">
+            <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <h2 class="fw-bold mb-2">Blood Donor Availability Management System</h2>
+        <p class="text-muted max-w-700 mx-auto mb-0" style="max-width: 750px;">
+            A responsive, database-driven web application built to bridge the critical gap between voluntary blood donors and recipients in emergency medical situations.
+        </p>
+    </div>
+
+    <!-- Blood Compatibility Matrix Card -->
+    <div class="card card-custom p-4 p-md-5 mb-4">
+        <h4 class="fw-bold mb-3 text-dark">
+            <i class="bi bi-grid-3x3-gap-fill text-danger me-2"></i>Blood Group Compatibility Matrix
+        </h4>
+        <p class="text-muted small mb-4">Understanding who can receive blood from which donors is essential during blood transfusion matches.</p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-danger fw-bold">Recipient Blood Type</th>
+                        <th>Can Receive Red Blood Cells From</th>
+                        <th>Can Donate Red Blood Cells To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge-blood-type">O-</span></td>
+                        <td><strong>O-</strong> <small class="text-muted">(Universal Red Cell Donor)</small></td>
+                        <td>Everyone (All Blood Groups)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">O+</span></td>
+                        <td>O+, O-</td>
+                        <td>O+, A+, B+, AB+</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">A-</span></td>
+                        <td>A-, O-</td>
+                        <td>A+, A-, AB+, AB-</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">A+</span></td>
+                        <td>A+, A-, O+, O-</td>
+                        <td>A+, AB+</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">B-</span></td>
+                        <td>B-, O-</td>
+                        <td>B+, B-, AB+, AB-</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">B+</span></td>
+                        <td>B+, B-, O+, O-</td>
+                        <td>B+, AB+</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">AB-</span></td>
+                        <td>AB-, A-, B-, O-</td>
+                        <td>AB+, AB-</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-blood-type">AB+</span></td>
+                        <td>Everyone (Universal Recipient)</td>
+                        <td><strong>AB+</strong> only</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Project Architecture & Key Features -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card card-custom p-4 h-100">
+                <h5 class="fw-bold mb-3 text-dark">
+                    <i class="bi bi-gear-wide-connected text-danger me-2"></i>System Architecture
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="bi bi-window text-primary h5 mb-0"></i>
+                        <div>
+                            <strong>Frontend Layer:</strong>
+                            <div class="text-muted small">HTML5, CSS3, JavaScript, Bootstrap 5 responsive UI with real-time feedback.</div>
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="bi bi-hdd-network text-success h5 mb-0"></i>
+                        <div>
+                            <strong>Backend Layer:</strong>
+                            <div class="text-muted small">Python 3.13, Django 6, Django REST Framework (DRF) with clean MVC/MVT architecture.</div>
+                        </div>
+                    </li>
+                    <li class="d-flex gap-3">
+                        <i class="bi bi-database text-warning h5 mb-0"></i>
+                        <div>
+                            <strong>Database Layer:</strong>
+                            <div class="text-muted small">SQLite relational database with Django ORM schema management and migrations.</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card card-custom p-4 h-100">
+                <h5 class="fw-bold mb-3 text-dark">
+                    <i class="bi bi-check2-all text-danger me-2"></i>Core Objectives
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2 text-muted">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Complete CRUD Support:</strong> Add, view, edit, and delete donor records safely.
+                    </li>
+                    <li class="mb-2 text-muted">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Location & Blood Filtering:</strong> Instant search by City, Blood Type, and Availability status.
+                    </li>
+                    <li class="mb-2 text-muted">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Live Statistics Dashboard:</strong> Real-time overview of donor readiness across all 8 blood groups.
+                    </li>
+                    <li class="text-muted">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>RESTful API:</strong> Standardized JSON endpoints ready for mobile app or third-party health integration.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

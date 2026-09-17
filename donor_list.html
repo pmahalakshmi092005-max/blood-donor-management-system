@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}Blood Donors Directory - Blood Donor System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-people-fill text-danger me-2"></i>Blood Donors Directory
+            </h2>
+            <p class="text-muted mb-0">Search, filter, and manage blood donor profiles in real time.</p>
+        </div>
+        <div>
+            <a href="{% url 'donor_add' %}" class="btn btn-primary-red">
+                <i class="bi bi-plus-circle me-1"></i> Add New Donor
+            </a>
+        </div>
+    </div>
+
+    <!-- Search & Filter Card -->
+    <div class="card card-custom p-4 mb-4" id="search-section">
+        <form method="GET" action="{% url 'donor_list' %}">
+            <div class="row g-3 align-items-end">
+                <!-- Search input -->
+                <div class="col-lg-4 col-md-6">
+                    <label class="form-label fw-semibold small text-muted">
+                        <i class="bi bi-search me-1"></i> Search (Name / City / Phone)
+                    </label>
+                    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search by name, city, phone...">
+                </div>
+
+                <!-- Blood Group Filter -->
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label fw-semibold small text-muted">
+                        <i class="bi bi-droplet-fill me-1 text-danger"></i> Blood Group
+                    </label>
+                    <select name="blood_group" class="form-select">
+                        <option value="">All Blood Groups</option>
+                        {% for bg in blood_groups %}
+                        <option value="{{ bg }}" {% if selected_blood_group == bg %}selected{% endif %}>{{ bg }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- City Filter -->
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label fw-semibold small text-muted">
+                        <i class="bi bi-geo-alt-fill me-1 text-danger"></i> City
+                    </label>
+                    <select name="city" class="form-select">
+                        <option value="">All Cities</option>
+                        {% for c in all_cities %}
+                        <option value="{{ c }}" {% if selected_city == c %}selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Availability Filter -->
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label fw-semibold small text-muted">
+                        <i class="bi bi-shield-check me-1 text-success"></i> Availability
+                    </label>
+                    <select name="availability" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Available" {% if selected_availability == 'Available' %}selected{% endif %}>Available</option>
+                        <option value="Unavailable" {% if selected_availability == 'Unavailable' %}selected{% endif %}>Unavailable</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-lg-1 col-md-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-red w-100" title="Apply Filters">
+                        <i class="bi bi-funnel-fill"></i>
+                    </button>
+                    {% if q or selected_blood_group or selected_city or selected_availability %}
+                    <a href="{% url 'donor_list' %}" class="btn btn-outline-secondary" title="Clear Filters">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+
+        <!-- Active Filters summary badge row -->
+        {% if q or selected_blood_group or selected_city or selected_availability %}
+        <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-3 border-top">
+            <span class="small fw-bold text-muted">Active Filters:</span>
+            {% if q %}
+            <span class="badge bg-light text-dark border">Search: "{{ q }}"</span>
+            {% endif %}
+            {% if selected_blood_group %}
+            <span class="badge bg-danger text-white">Blood Group: {{ selected_blood_group }}</span>
+            {% endif %}
+            {% if selected_city %}
+            <span class="badge bg-primary text-white">City: {{ selected_city }}</span>
+            {% endif %}
+            {% if selected_availability %}
+            <span class="badge bg-success text-white">Status: {{ selected_availability }}</span>
+            {% endif %}
+            <a href="{% url 'donor_list' %}" class="small text-danger fw-semibold text-decoration-none ms-2">Clear All Filters</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Results Table Card -->
+    <div class="card card-custom">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <span class="fw-semibold text-muted">
+                Showing <strong class="text-dark">{{ total_results }}</strong> donor{{ total_results|pluralize }}
+            </span>
+            <span class="small text-muted">Sorted by newest registered</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-custom table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Blood Group</th>
+                        <th>Age / Gender</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>Last Donation</th>
+                        <th>Availability</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donor in donors %}
+                    <tr>
+                        <td class="text-muted fw-semibold">#{{ donor.id }}</td>
+                        <td>
+                            <a href="{% url 'donor_detail' donor.id %}" class="text-decoration-none fw-bold text-dark hover-red">
+                                {{ donor.full_name }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge-blood-type">{{ donor.blood_group }}</span>
+                        </td>
+                        <td>
+                            <span class="text-dark fw-semibold">{{ donor.age }} yrs</span>
+                            <small class="text-muted d-block">{{ donor.gender }}</small>
+                        </td>
+                        <td>
+                            <a href="tel:{{ donor.phone }}" class="text-decoration-none text-dark">
+                                <i class="bi bi-telephone text-success me-1"></i>{{ donor.phone }}
+                            </a>
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ donor.email }}</small>
+                        </td>
+                        <td>{{ donor.city }}</td>
+                        <td>
+                            {% if donor.last_donation_date %}
+                            <small class="text-muted">{{ donor.last_donation_date|date:"d M Y" }}</small>
+                            {% else %}
+                            <small class="text-muted fst-italic">First-time donor</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if donor.availability == 'Available' %}
+                            <span class="badge-available"><i class="bi bi-check-circle-fill"></i> Available</span>
+                            {% else %}
+                            <span class="badge-unavailable"><i class="bi bi-x-circle-fill"></i> Unavailable</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="d-inline-flex gap-1">
+                                <a href="{% url 'donor_detail' donor.id %}" class="btn-action-view text-decoration-none" title="View Details">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                                <a href="{% url 'donor_edit' donor.id %}" class="btn-action-edit text-decoration-none" title="Edit Donor">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <a href="{% url 'donor_delete' donor.id %}" class="btn-action-delete text-decoration-none" title="Delete Donor">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center py-5">
+                            <div class="text-muted mb-3">
+                                <i class="bi bi-emoji-neutral display-4 text-secondary"></i>
+                            </div>
+                            <h5 class="fw-bold text-dark">No matching donors found</h5>
+                            <p class="text-muted small">Try adjusting your search criteria or clear filters to see all donors.</p>
+                            <a href="{% url 'donor_list' %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filters
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}System Analytics Dashboard - Blood Donor System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-speedometer2 text-danger me-2"></i>Donor Availability Dashboard
+            </h2>
+            <p class="text-muted mb-0">Overview of blood inventory, registered donors, and real-time availability status.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'donor_add' %}" class="btn btn-primary-red">
+                <i class="bi bi-plus-circle me-1"></i> Add New Donor
+            </a>
+            <a href="{% url 'donor_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-list-ul me-1"></i> View All Donors
+            </a>
+        </div>
+    </div>
+
+    <!-- Overview Counters -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <div class="stat-number">{{ total_donors }}</div>
+                    <div class="stat-label">Total Registered Donors</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card" style="border-left-color: #2e7d32;">
+                <div class="stat-icon green">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <div>
+                    <div class="stat-number text-success">{{ available_donors }}</div>
+                    <div class="stat-label">Currently Available Donors</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card" style="border-left-color: #546e7a;">
+                <div class="stat-icon gray">
+                    <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <div>
+                    <div class="stat-number text-secondary">{{ unavailable_donors }}</div>
+                    <div class="stat-label">Temporarily Unavailable</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Group Distribution Grid (All 8 Groups) -->
+    <h4 class="fw-bold mb-3 mt-4">
+        <i class="bi bi-droplet-half text-danger me-2"></i>Donors by Blood Group
+    </h4>
+    <div class="row g-3 mb-5">
+        {% for stat in blood_stats %}
+        <div class="col-6 col-md-3">
+            <div class="blood-group-badge-card">
+                <div class="blood-type-symbol">{{ stat.group }}</div>
+                <div class="h5 fw-bold mb-1">{{ stat.count }} <small class="text-muted fw-normal" style="font-size: 0.8rem;">donors</small></div>
+                <div>
+                    <span class="badge bg-success bg-opacity-10 text-success fw-semibold">
+                        {{ stat.available_count }} Available
+                    </span>
+                </div>
+                <a href="{% url 'donor_list' %}?blood_group={{ stat.group|urlencode }}" class="stretched-link"></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Recent Donors Section -->
+    <div class="card card-custom">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-clock-history text-danger me-2"></i>Recently Registered Donors
+            </h5>
+            <a href="{% url 'donor_list' %}" class="btn btn-sm btn-outline-danger">
+                See Full List <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-custom table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Blood Group</th>
+                        <th>City</th>
+                        <th>Phone</th>
+                        <th>Availability</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donor in recent_donors %}
+                    <tr>
+                        <td class="text-muted fw-semibold">#{{ donor.id }}</td>
+                        <td class="fw-bold text-dark">{{ donor.full_name }}</td>
+                        <td>
+                            <span class="badge-blood-type">{{ donor.blood_group }}</span>
+                        </td>
+                        <td>{{ donor.city }}</td>
+                        <td>{{ donor.phone }}</td>
+                        <td>
+                            {% if donor.availability == 'Available' %}
+                            <span class="badge-available"><i class="bi bi-dot"></i> Available</span>
+                            {% else %}
+                            <span class="badge-unavailable"><i class="bi bi-dot"></i> Unavailable</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'donor_detail' donor.id %}" class="btn-action-view text-decoration-none">
+                                <i class="bi bi-eye-fill"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">No donor records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

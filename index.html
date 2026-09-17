@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Donate Blood, Save Lives - Blood Donor System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center py-3">
+            <div class="col-lg-7 text-center text-lg-start mb-4 mb-lg-0">
+                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="bi bi-heart-pulse-fill me-1"></i> Every Drop Counts
+                </span>
+                <h1 class="hero-title">
+                    Donate Blood, <span class="text-red">Save Lives</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Connecting blood donors with people who need them. Search for compatible blood donors near your city or register yourself as a life-saving hero today.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a href="{% url 'donor_list' %}" class="btn btn-primary-red btn-lg">
+                        <i class="bi bi-search me-2"></i> Find a Donor
+                    </a>
+                    <a href="{% url 'donor_add' %}" class="btn btn-outline-red btn-lg">
+                        <i class="bi bi-person-plus-fill me-2"></i> Register as Donor
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="p-4 bg-white rounded-4 shadow-sm border border-danger border-opacity-10">
+                    <div class="display-1 text-danger mb-2">
+                        <i class="bi bi-droplet-half"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Need Blood Urgently?</h4>
+                    <p class="text-muted small">Our real-time database allows immediate lookup of verified, available blood donors in your area.</p>
+                    <a href="{% url 'donor_list' %}" class="btn btn-sm btn-outline-danger rounded-pill px-4">
+                        Search Available Donors <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Live Statistics Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">{{ total_donors }}</div>
+                        <div class="stat-label">Total Donors</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card" style="border-left-color: #2e7d32;">
+                    <div class="stat-icon green">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number text-success">{{ available_donors }}</div>
+                        <div class="stat-label">Available Donors</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card" style="border-left-color: #546e7a;">
+                    <div class="stat-icon gray">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number text-secondary">{{ unavailable_donors }}</div>
+                        <div class="stat-label">Unavailable</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card" style="border-left-color: #1976d2;">
+                    <div class="stat-icon blue">
+                        <i class="bi bi-droplet-fill"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number text-primary">{{ blood_groups_count }}</div>
+                        <div class="stat-label">Blood Groups</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Donate Blood Section -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-danger fw-bold text-uppercase small letter-spacing">Give The Gift of Life</span>
+            <h2 class="fw-bold mt-1">Why Donate Blood?</h2>
+            <p class="text-muted">Blood cannot be manufactured in a factory. It can only come from generous donors like you.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card-custom h-100 p-4 border text-center">
+                    <div class="stat-icon red mx-auto mb-3">
+                        <i class="bi bi-heart-fill"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Save Up to 3 Lives</h5>
+                    <p class="text-muted small mb-0">Every single whole blood donation can be separated into red cells, platelets, and plasma, helping multiple patients in critical care.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card-custom h-100 p-4 border text-center">
+                    <div class="stat-icon green mx-auto mb-3">
+                        <i class="bi bi-hospital-fill"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Critical Hospital Need</h5>
+                    <p class="text-muted small mb-0">Hospitals require constant blood supplies for accident emergencies, surgical procedures, anemia, and cancer chemotherapy support.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card-custom h-100 p-4 border text-center">
+                    <div class="stat-icon blue mx-auto mb-3">
+                        <i class="bi bi-clipboard2-pulse-fill"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Mini Health Checkup</h5>
+                    <p class="text-muted small mb-0">Donors receive a quick physical health assessment including pulse, blood pressure, and hemoglobin levels before every donation.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card-custom h-100 p-4 border text-center">
+                    <div class="stat-icon gray mx-auto mb-3">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Replenishes Quickly</h5>
+                    <p class="text-muted small mb-0">The human body naturally regenerates the donated plasma in 24 to 48 hours, and red blood cells within just a few weeks.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5" style="background: linear-gradient(135deg, #d32f2f, #b71c1c); color: #ffffff;">
+    <div class="container text-center py-3">
+        <h2 class="fw-bold mb-3">Ready to Make a Difference?</h2>
+        <p class="lead mb-4 text-white-50">Join our donor network today. Your simple act of kindness could save a life tomorrow.</p>
+        <a href="{% url 'donor_add' %}" class="btn btn-light btn-lg text-danger fw-bold rounded-pill px-5 shadow">
+            <i class="bi bi-person-plus-fill me-2"></i> Register as a Blood Donor
+        </a>
+    </div>
+</section>
+{% endblock %}
