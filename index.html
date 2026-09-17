@@ -1,157 +1,2079 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %}Donate Blood, Save Lives - Blood Donor System{% endblock %}
+<title>LifeLink | Blood Donor Management System</title>
 
-{% block content %}
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center py-3">
-            <div class="col-lg-7 text-center text-lg-start mb-4 mb-lg-0">
-                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill fw-semibold mb-3">
-                    <i class="bi bi-heart-pulse-fill me-1"></i> Every Drop Counts
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --primary:#e11d48;
+    --primary-dark:#9f1239;
+    --secondary:#7c3aed;
+    --blue:#2563eb;
+    --cyan:#0891b2;
+    --green:#059669;
+    --orange:#ea580c;
+    --yellow:#f59e0b;
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --shadow:0 18px 45px rgba(15,23,42,.10);
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+    Inter,Segoe UI,Arial,sans-serif;
+
+    background:
+    radial-gradient(circle at top left,#ffe4e6,transparent 30%),
+    radial-gradient(circle at top right,#ede9fe,transparent 30%),
+    var(--bg);
+
+    color:var(--text);
+    line-height:1.6;
+}
+
+body.dark{
+    --bg:#07111f;
+    --card:#101c2d;
+    --text:#f8fafc;
+    --muted:#a8b3c7;
+    --border:#263449;
+
+    background:
+    radial-gradient(circle at top left,#3f0b20,transparent 30%),
+    radial-gradient(circle at top right,#251052,transparent 30%),
+    #07111f;
+}
+
+a{
+    text-decoration:none;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:16px 7%;
+
+    background:rgba(255,255,255,.82);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid rgba(255,255,255,.5);
+    box-shadow:0 4px 25px rgba(0,0,0,.05);
+}
+
+.dark .navbar{
+    background:rgba(7,17,31,.85);
+    border-color:#263449;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    width:45px;
+    height:45px;
+    border-radius:14px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(135deg,#fb7185,#be123c);
+
+    color:white;
+    font-size:23px;
+
+    box-shadow:0 8px 20px rgba(225,29,72,.30);
+}
+
+.logo h2{
+    font-size:21px;
+}
+
+.logo span{
+    color:var(--primary);
+}
+
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+.nav-links a{
+    color:var(--text);
+    font-weight:600;
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    color:var(--primary);
+}
+
+.theme-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+
+    background:var(--card);
+    color:var(--text);
+
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:100vh;
+
+    padding:140px 7% 80px;
+
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:50px;
+
+    align-items:center;
+
+    overflow:hidden;
+    position:relative;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+
+    width:500px;
+    height:500px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        rgba(244,63,94,.20),
+        rgba(124,58,237,.15)
+    );
+
+    right:-200px;
+    top:80px;
+
+    filter:blur(10px);
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:9px 16px;
+
+    border-radius:50px;
+
+    background:#ffe4e6;
+    color:#be123c;
+
+    font-size:14px;
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.dark .badge{
+    background:#4c1024;
+    color:#fda4af;
+}
+
+.hero h1{
+    font-size:clamp(45px,6vw,78px);
+    line-height:1.04;
+    letter-spacing:-3px;
+    margin-bottom:22px;
+}
+
+.gradient-text{
+    background:linear-gradient(
+        90deg,
+        #e11d48,
+        #7c3aed,
+        #2563eb
+    );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero-description{
+    max-width:700px;
+
+    font-size:18px;
+    color:var(--muted);
+
+    margin-bottom:30px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+
+    padding:14px 23px;
+
+    border:none;
+    border-radius:13px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn-primary{
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #e11d48,
+        #be123c
+    );
+
+    box-shadow:0 10px 25px rgba(225,29,72,.25);
+}
+
+.btn-secondary{
+    color:var(--text);
+    background:var(--card);
+    border:1px solid var(--border);
+}
+
+/* =========================================================
+   HERO CARD
+========================================================= */
+
+.hero-card{
+    position:relative;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.92),
+        rgba(255,255,255,.65)
+    );
+
+    padding:35px;
+
+    border-radius:30px;
+
+    box-shadow:
+    0 30px 80px rgba(74,21,44,.15);
+
+    border:1px solid rgba(255,255,255,.8);
+
+    animation:float 4s ease-in-out infinite;
+}
+
+.dark .hero-card{
+    background:linear-gradient(
+        145deg,
+        #142236,
+        #0c1726
+    );
+
+    border-color:#263449;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+.heart{
+    width:110px;
+    height:110px;
+
+    margin:10px auto 25px;
+
+    border-radius:35px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:58px;
+
+    background:linear-gradient(
+        135deg,
+        #ffe4e6,
+        #fecdd3
+    );
+
+    box-shadow:0 15px 35px rgba(225,29,72,.20);
+}
+
+.hero-card h2{
+    text-align:center;
+    font-size:27px;
+}
+
+.hero-card > p{
+    text-align:center;
+    color:var(--muted);
+    margin:10px 0 25px;
+}
+
+.quick-info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.quick-box{
+    text-align:center;
+    padding:18px 8px;
+    border-radius:15px;
+    background:var(--bg);
+}
+
+.quick-box strong{
+    display:block;
+    color:var(--primary);
+    font-size:22px;
+}
+
+/* =========================================================
+   GENERAL SECTION
+========================================================= */
+
+.section{
+    padding:90px 7%;
+}
+
+.section-heading{
+    text-align:center;
+    max-width:750px;
+    margin:0 auto 50px;
+}
+
+.section-heading span{
+    color:var(--primary);
+    text-transform:uppercase;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+.section-heading h2{
+    font-size:clamp(30px,4vw,45px);
+    margin:7px 0 10px;
+}
+
+.section-heading p{
+    color:var(--muted);
+}
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.stat-card{
+    padding:28px;
+
+    border-radius:22px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-8px);
+}
+
+.stat-icon{
+    width:50px;
+    height:50px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:14px;
+
+    font-size:23px;
+    margin-bottom:20px;
+}
+
+.red{
+    background:#ffe4e6;
+}
+
+.purple{
+    background:#ede9fe;
+}
+
+.blue{
+    background:#dbeafe;
+}
+
+.green{
+    background:#d1fae5;
+}
+
+.stat-card h3{
+    font-size:35px;
+}
+
+.stat-card p{
+    color:var(--muted);
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-section{
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,228,230,.60),
+        rgba(237,233,254,.60)
+    );
+}
+
+.dark .search-section{
+    background:#0b1626;
+}
+
+.search-panel{
+    max-width:1050px;
+    margin:auto;
+
+    padding:35px;
+
+    background:var(--card);
+
+    border-radius:25px;
+
+    box-shadow:var(--shadow);
+
+    border:1px solid var(--border);
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:20px;
+}
+
+.form-group label{
+    display:block;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.form-control{
+    width:100%;
+
+    padding:14px 15px;
+
+    border:1px solid var(--border);
+    border-radius:12px;
+
+    outline:none;
+
+    background:var(--bg);
+    color:var(--text);
+
+    transition:.2s;
+}
+
+.form-control:focus{
+    border-color:var(--primary);
+
+    box-shadow:
+    0 0 0 3px rgba(225,29,72,.10);
+}
+
+.search-button{
+    width:100%;
+    margin-top:20px;
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results{
+    margin-top:30px;
+    display:none;
+}
+
+.results h3{
+    margin-bottom:15px;
+}
+
+.donor-result{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
+    margin-bottom:12px;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    background:var(--bg);
+}
+
+.donor-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.avatar{
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(
+        135deg,
+        #fb7185,
+        #e11d48
+    );
+
+    color:white;
+    font-weight:bold;
+}
+
+.available{
+    padding:6px 10px;
+
+    border-radius:20px;
+
+    background:#d1fae5;
+    color:#047857;
+
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* =========================================================
+   BLOOD GROUPS
+========================================================= */
+
+.blood-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.blood-card{
+    position:relative;
+    overflow:hidden;
+
+    text-align:center;
+
+    padding:32px 20px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+    border-radius:22px;
+
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+}
+
+.blood-card::before{
+    content:"";
+
+    position:absolute;
+    width:100px;
+    height:100px;
+
+    border-radius:50%;
+
+    background:rgba(225,29,72,.08);
+
+    top:-50px;
+    right:-40px;
+}
+
+.blood-card:hover{
+    transform:translateY(-8px) scale(1.02);
+    border-color:#fda4af;
+}
+
+.drop{
+    font-size:28px;
+}
+
+.blood-card h3{
+    color:var(--primary);
+    font-size:35px;
+    margin:8px 0;
+}
+
+.blood-card p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =========================================================
+   EMERGENCY
+========================================================= */
+
+.emergency{
+    margin:0 7%;
+
+    padding:55px;
+
+    border-radius:30px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #9f1239,
+        #e11d48,
+        #7c3aed
+    );
+
+    color:white;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:30px;
+
+    box-shadow:0 25px 60px rgba(159,18,57,.25);
+}
+
+.emergency h2{
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+.emergency p{
+    max-width:650px;
+    opacity:.9;
+}
+
+.emergency .btn{
+    background:white;
+    color:#be123c;
+    white-space:nowrap;
+}
+
+/* =========================================================
+   BENEFITS
+========================================================= */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+}
+
+.feature-card{
+    background:var(--card);
+
+    padding:30px;
+
+    border-radius:22px;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+}
+
+.feature-icon{
+    width:55px;
+    height:55px;
+
+    border-radius:16px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:25px;
+
+    margin-bottom:20px;
+}
+
+.feature-card h3{
+    margin-bottom:10px;
+}
+
+.feature-card p{
+    color:var(--muted);
+}
+
+/* =========================================================
+   REGISTRATION
+========================================================= */
+
+.register-wrapper{
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:40px;
+    align-items:center;
+}
+
+.register-info h2{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.register-info p{
+    color:var(--muted);
+    margin-bottom:20px;
+}
+
+.check{
+    margin:13px 0;
+    font-weight:600;
+}
+
+.check span{
+    color:var(--green);
+    margin-right:8px;
+}
+
+.register-card{
+    background:var(--card);
+
+    padding:35px;
+
+    border-radius:25px;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+}
+
+.two-column{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.full-btn{
+    width:100%;
+    margin-top:10px;
+}
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    max-width:350px;
+
+    padding:17px 20px;
+
+    background:#052e25;
+    color:white;
+
+    border-radius:14px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+    transform:translateY(120px);
+    opacity:0;
+
+    transition:.4s;
+
+    z-index:2000;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    background:#080f1c;
+    color:#cbd5e1;
+
+    padding:60px 7% 25px;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:40px;
+
+    margin-bottom:40px;
+}
+
+footer h2,
+footer h3{
+    color:white;
+    margin-bottom:15px;
+}
+
+footer p{
+    max-width:500px;
+}
+
+.footer-links{
+    list-style:none;
+}
+
+.footer-links li{
+    margin:9px 0;
+}
+
+.footer-links a{
+    color:#cbd5e1;
+}
+
+.footer-bottom{
+    border-top:1px solid #253044;
+    padding-top:22px;
+
+    text-align:center;
+
+    font-size:14px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .hero-description{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .hero-card{
+        max-width:600px;
+        margin:auto;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .register-wrapper{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:800px){
+
+    .nav-links{
+        display:none;
+    }
+
+    .blood-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .emergency{
+        flex-direction:column;
+        text-align:center;
+        margin:0 4%;
+        padding:35px 20px;
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:520px){
+
+    .section{
+        padding:70px 5%;
+    }
+
+    .navbar{
+        padding:13px 5%;
+    }
+
+    .logo h2{
+        font-size:17px;
+    }
+
+    .hero{
+        padding:120px 5% 60px;
+    }
+
+    .hero h1{
+        letter-spacing:-1px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .blood-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .two-column{
+        grid-template-columns:1fr;
+    }
+
+    .quick-info{
+        grid-template-columns:1fr;
+    }
+
+    .donor-result{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     NAVIGATION
+====================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">♥</div>
+
+        <h2>Life<span>Link</span></h2>
+
+    </div>
+
+    <ul class="nav-links">
+
+        <li><a href="#home">Home</a></li>
+
+        <li><a href="#find">Find Donor</a></li>
+
+        <li><a href="#blood">Blood Groups</a></li>
+
+        <li><a href="#register">Register</a></li>
+
+        <li><a href="#about">About</a></li>
+
+    </ul>
+
+    <button
+        class="theme-btn"
+        onclick="toggleTheme()"
+        id="themeButton">
+        🌙
+    </button>
+
+</nav>
+
+
+<!-- ======================================================
+     HERO
+====================================================== -->
+
+<section class="hero" id="home">
+
+    <div>
+
+        <div class="badge">
+            ● LIVE DONOR NETWORK
+        </div>
+
+        <h1>
+            A Drop of Blood
+            Can Create a
+            <span class="gradient-text">
+                Lifetime of Hope.
+            </span>
+        </h1>
+
+        <p class="hero-description">
+            LifeLink is a smart Blood Donor Availability
+            Management System designed to connect voluntary
+            blood donors with people who need blood quickly.
+            Search by blood group and location through one
+            simple and accessible platform.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="#find"
+                class="btn btn-primary">
+                🔍 Find Blood Donor
+            </a>
+
+            <a
+                href="#register"
+                class="btn btn-secondary">
+                ♥ Become a Donor
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-card">
+
+        <div class="heart">
+            🩸
+        </div>
+
+        <h2>Every Drop Matters</h2>
+
+        <p>
+            Together we can build a stronger
+            blood donation community.
+        </p>
+
+        <div class="quick-info">
+
+            <div class="quick-box">
+                <strong>8</strong>
+                Blood Groups
+            </div>
+
+            <div class="quick-box">
+                <strong>24/7</strong>
+                Access
+            </div>
+
+            <div class="quick-box">
+                <strong>100%</strong>
+                Voluntary
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     STATISTICS
+====================================================== -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span>Live Overview</span>
+
+        <h2>Blood Donation Network</h2>
+
+        <p>
+            A simple overview demonstrating how donor
+            availability information can be presented
+            through the management system.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon red">
+                👥
+            </div>
+
+            <h3>120+</h3>
+
+            <p>Registered Donors</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+                ✓
+            </div>
+
+            <h3>85</h3>
+
+            <p>Available Donors</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon purple">
+                🩸
+            </div>
+
+            <h3>8</h3>
+
+            <p>Blood Groups</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                📍
+            </div>
+
+            <h3>15+</h3>
+
+            <p>Locations Covered</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     SEARCH
+====================================================== -->
+
+<section
+    class="section search-section"
+    id="find">
+
+    <div class="section-heading">
+
+        <span>Smart Search</span>
+
+        <h2>Find an Available Donor</h2>
+
+        <p>
+            Select the required blood group and location
+            to demonstrate donor availability search.
+        </p>
+
+    </div>
+
+
+    <div class="search-panel">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>🩸 Blood Group</label>
+
+                <select
+                    class="form-control"
+                    id="searchBlood">
+
+                    <option value="">
+                        Select blood group
+                    </option>
+
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>📍 City / Location</label>
+
+                <input
+                    class="form-control"
+                    id="searchCity"
+                    type="text"
+                    placeholder="Example: Chennai">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Availability</label>
+
+                <select class="form-control">
+
+                    <option>
+                        Available Now
+                    </option>
+
+                    <option>
+                        All Donors
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary search-button"
+            onclick="searchDonor()">
+
+            🔍 Search Available Donors
+
+        </button>
+
+
+        <div
+            class="results"
+            id="results">
+
+            <h3 id="resultTitle">
+                Available Donors
+            </h3>
+
+
+            <div class="donor-result">
+
+                <div class="donor-left">
+
+                    <div class="avatar">
+                        AK
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Arun Kumar
+                        </strong>
+
+                        <p>
+                            O+ • Chennai
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="available">
+                    ● AVAILABLE
                 </span>
-                <h1 class="hero-title">
-                    Donate Blood, <span class="text-red">Save Lives</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Connecting blood donors with people who need them. Search for compatible blood donors near your city or register yourself as a life-saving hero today.
-                </p>
-                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-                    <a href="{% url 'donor_list' %}" class="btn btn-primary-red btn-lg">
-                        <i class="bi bi-search me-2"></i> Find a Donor
+
+            </div>
+
+
+            <div class="donor-result">
+
+                <div class="donor-left">
+
+                    <div class="avatar">
+                        PS
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Priya S
+                        </strong>
+
+                        <p>
+                            A+ • Chennai
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="available">
+                    ● AVAILABLE
+                </span>
+
+            </div>
+
+
+            <div class="donor-result">
+
+                <div class="donor-left">
+
+                    <div class="avatar">
+                        RK
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Raj Kumar
+                        </strong>
+
+                        <p>
+                            B+ • Coimbatore
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="available">
+                    ● AVAILABLE
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     BLOOD GROUPS
+====================================================== -->
+
+<section
+    class="section"
+    id="blood">
+
+    <div class="section-heading">
+
+        <span>Blood Types</span>
+
+        <h2>Explore Blood Groups</h2>
+
+        <p>
+            The system supports all eight major
+            ABO and Rh blood groups.
+        </p>
+
+    </div>
+
+
+    <div class="blood-grid">
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>A+</h3>
+            <p>A Positive</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>A−</h3>
+            <p>A Negative</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>B+</h3>
+            <p>B Positive</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>B−</h3>
+            <p>B Negative</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>AB+</h3>
+            <p>AB Positive</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>AB−</h3>
+            <p>AB Negative</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>O+</h3>
+            <p>O Positive</p>
+        </div>
+
+        <div class="blood-card">
+            <div class="drop">🩸</div>
+            <h3>O−</h3>
+            <p>O Negative</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     EMERGENCY
+====================================================== -->
+
+<section class="emergency">
+
+    <div>
+
+        <h2>🚨 Need Blood Urgently?</h2>
+
+        <p>
+            Quickly search the donor network by blood
+            group and location to identify potential
+            available donors.
+        </p>
+
+    </div>
+
+    <a
+        href="#find"
+        class="btn">
+
+        Search Now →
+
+    </a>
+
+</section>
+
+
+<!-- ======================================================
+     FEATURES
+====================================================== -->
+
+<section
+    class="section"
+    id="about">
+
+    <div class="section-heading">
+
+        <span>Our Purpose</span>
+
+        <h2>Technology That Connects Lives</h2>
+
+        <p>
+            LifeLink demonstrates how web technology can
+            simplify donor information management and
+            blood availability searching.
+        </p>
+
+    </div>
+
+
+    <div class="features">
+
+        <div class="feature-card">
+
+            <div class="feature-icon red">
+                🔎
+            </div>
+
+            <h3>Quick Donor Search</h3>
+
+            <p>
+                Search donors using blood group,
+                location and availability information
+                through a simple interface.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon purple">
+                ⚡
+            </div>
+
+            <h3>Fast Availability</h3>
+
+            <p>
+                Clearly identify donors marked as
+                available to simplify emergency
+                donor identification.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon blue">
+                🗂️
+            </div>
+
+            <h3>Donor Management</h3>
+
+            <p>
+                The full Django application supports
+                structured donor information and
+                CRUD-based record management.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon green">
+                📱
+            </div>
+
+            <h3>Responsive Design</h3>
+
+            <p>
+                The interface adapts to desktop,
+                laptop, tablet and mobile screen
+                sizes.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon red">
+                🩸
+            </div>
+
+            <h3>Blood Group Tracking</h3>
+
+            <p>
+                Organize donors according to the
+                eight common blood groups for
+                easier management.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon purple">
+                🌐
+            </div>
+
+            <h3>Accessible Platform</h3>
+
+            <p>
+                The frontend demonstration can be
+                accessed through a public web link
+                across modern devices.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     REGISTRATION
+====================================================== -->
+
+<section
+    class="section"
+    id="register">
+
+    <div class="register-wrapper">
+
+        <div class="register-info">
+
+            <span
+                style="
+                color:var(--primary);
+                font-weight:800;
+            ">
+                JOIN THE COMMUNITY
+            </span>
+
+            <h2>
+                Become Someone's
+                <span class="gradient-text">
+                    Lifeline.
+                </span>
+            </h2>
+
+            <p>
+                Register your donor information and
+                become part of a community that
+                supports people during emergencies.
+            </p>
+
+            <div class="check">
+                <span>✓</span>
+                Simple donor registration
+            </div>
+
+            <div class="check">
+                <span>✓</span>
+                Blood-group classification
+            </div>
+
+            <div class="check">
+                <span>✓</span>
+                Location-based information
+            </div>
+
+            <div class="check">
+                <span>✓</span>
+                Availability management
+            </div>
+
+        </div>
+
+
+        <div class="register-card">
+
+            <h2>
+                Donor Registration
+            </h2>
+
+            <p
+                style="
+                    color:var(--muted);
+                    margin-bottom:25px;
+                ">
+                Complete the information below.
+            </p>
+
+
+            <div class="two-column">
+
+                <div class="form-group">
+
+                    <label>Full Name</label>
+
+                    <input
+                        id="donorName"
+                        class="form-control"
+                        type="text"
+                        placeholder="Enter your name">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Blood Group</label>
+
+                    <select
+                        id="donorBlood"
+                        class="form-control">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input
+                        id="donorCity"
+                        class="form-control"
+                        type="text"
+                        placeholder="Enter city">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        id="donorPhone"
+                        class="form-control"
+                        type="tel"
+                        placeholder="Enter phone number">
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="form-group"
+                style="margin-top:18px;">
+
+                <label>Current Availability</label>
+
+                <select class="form-control">
+
+                    <option>
+                        Available to Donate
+                    </option>
+
+                    <option>
+                        Currently Unavailable
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="btn btn-primary full-btn"
+                onclick="registerDonor()">
+
+                ♥ Register as Blood Donor
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     FOOTER
+====================================================== -->
+
+<footer>
+
+    <div class="footer-grid">
+
+        <div>
+
+            <h2>
+                🩸 LifeLink
+            </h2>
+
+            <p>
+                Blood Donor Availability Management System
+                designed to demonstrate donor registration,
+                blood-group management, availability tracking
+                and donor searching.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>Quick Links</h3>
+
+            <ul class="footer-links">
+
+                <li>
+                    <a href="#home">
+                        Home
                     </a>
-                    <a href="{% url 'donor_add' %}" class="btn btn-outline-red btn-lg">
-                        <i class="bi bi-person-plus-fill me-2"></i> Register as Donor
+                </li>
+
+                <li>
+                    <a href="#find">
+                        Find Donor
                     </a>
-                </div>
-            </div>
-            <div class="col-lg-5 text-center">
-                <div class="p-4 bg-white rounded-4 shadow-sm border border-danger border-opacity-10">
-                    <div class="display-1 text-danger mb-2">
-                        <i class="bi bi-droplet-half"></i>
-                    </div>
-                    <h4 class="fw-bold text-dark">Need Blood Urgently?</h4>
-                    <p class="text-muted small">Our real-time database allows immediate lookup of verified, available blood donors in your area.</p>
-                    <a href="{% url 'donor_list' %}" class="btn btn-sm btn-outline-danger rounded-pill px-4">
-                        Search Available Donors <i class="bi bi-arrow-right ms-1"></i>
+                </li>
+
+                <li>
+                    <a href="#register">
+                        Register
                     </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                </li>
 
-<!-- Live Statistics Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card">
-                    <div class="stat-icon red">
-                        <i class="bi bi-people-fill"></i>
-                    </div>
-                    <div>
-                        <div class="stat-number">{{ total_donors }}</div>
-                        <div class="stat-label">Total Donors</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card" style="border-left-color: #2e7d32;">
-                    <div class="stat-icon green">
-                        <i class="bi bi-check-circle-fill"></i>
-                    </div>
-                    <div>
-                        <div class="stat-number text-success">{{ available_donors }}</div>
-                        <div class="stat-label">Available Donors</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card" style="border-left-color: #546e7a;">
-                    <div class="stat-icon gray">
-                        <i class="bi bi-clock-history"></i>
-                    </div>
-                    <div>
-                        <div class="stat-number text-secondary">{{ unavailable_donors }}</div>
-                        <div class="stat-label">Unavailable</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card" style="border-left-color: #1976d2;">
-                    <div class="stat-icon blue">
-                        <i class="bi bi-droplet-fill"></i>
-                    </div>
-                    <div>
-                        <div class="stat-number text-primary">{{ blood_groups_count }}</div>
-                        <div class="stat-label">Blood Groups</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+            </ul>
 
-<!-- Why Donate Blood Section -->
-<section class="py-5 bg-white border-top border-bottom">
-    <div class="container">
-        <div class="text-center max-w-700 mx-auto mb-5">
-            <span class="text-danger fw-bold text-uppercase small letter-spacing">Give The Gift of Life</span>
-            <h2 class="fw-bold mt-1">Why Donate Blood?</h2>
-            <p class="text-muted">Blood cannot be manufactured in a factory. It can only come from generous donors like you.</p>
         </div>
 
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="card-custom h-100 p-4 border text-center">
-                    <div class="stat-icon red mx-auto mb-3">
-                        <i class="bi bi-heart-fill"></i>
-                    </div>
-                    <h5 class="fw-bold mb-2">Save Up to 3 Lives</h5>
-                    <p class="text-muted small mb-0">Every single whole blood donation can be separated into red cells, platelets, and plasma, helping multiple patients in critical care.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card-custom h-100 p-4 border text-center">
-                    <div class="stat-icon green mx-auto mb-3">
-                        <i class="bi bi-hospital-fill"></i>
-                    </div>
-                    <h5 class="fw-bold mb-2">Critical Hospital Need</h5>
-                    <p class="text-muted small mb-0">Hospitals require constant blood supplies for accident emergencies, surgical procedures, anemia, and cancer chemotherapy support.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card-custom h-100 p-4 border text-center">
-                    <div class="stat-icon blue mx-auto mb-3">
-                        <i class="bi bi-clipboard2-pulse-fill"></i>
-                    </div>
-                    <h5 class="fw-bold mb-2">Mini Health Checkup</h5>
-                    <p class="text-muted small mb-0">Donors receive a quick physical health assessment including pulse, blood pressure, and hemoglobin levels before every donation.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card-custom h-100 p-4 border text-center">
-                    <div class="stat-icon gray mx-auto mb-3">
-                        <i class="bi bi-arrow-repeat"></i>
-                    </div>
-                    <h5 class="fw-bold mb-2">Replenishes Quickly</h5>
-                    <p class="text-muted small mb-0">The human body naturally regenerates the donated plasma in 24 to 48 hours, and red blood cells within just a few weeks.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Call to Action Banner -->
-<section class="py-5" style="background: linear-gradient(135deg, #d32f2f, #b71c1c); color: #ffffff;">
-    <div class="container text-center py-3">
-        <h2 class="fw-bold mb-3">Ready to Make a Difference?</h2>
-        <p class="lead mb-4 text-white-50">Join our donor network today. Your simple act of kindness could save a life tomorrow.</p>
-        <a href="{% url 'donor_add' %}" class="btn btn-light btn-lg text-danger fw-bold rounded-pill px-5 shadow">
-            <i class="bi bi-person-plus-fill me-2"></i> Register as a Blood Donor
-        </a>
+        <div>
+
+            <h3>Blood Groups</h3>
+
+            <p>
+                A+ &nbsp; A− &nbsp;
+                B+ &nbsp; B−
+            </p>
+
+            <p>
+                AB+ &nbsp; AB− &nbsp;
+                O+ &nbsp; O−
+            </p>
+
+        </div>
+
     </div>
-</section>
-{% endblock %}
+
+
+    <div class="footer-bottom">
+
+        © 2026 LifeLink —
+        Blood Donor Availability Management System
+
+    </div>
+
+</footer>
+
+
+<!-- ======================================================
+     TOAST
+====================================================== -->
+
+<div
+    class="toast"
+    id="toast">
+
+    ✓ Operation completed successfully.
+
+</div>
+
+
+<!-- ======================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+/* DARK / LIGHT MODE */
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+    const button =
+        document.getElementById("themeButton");
+
+    if(
+        document.body.classList.contains("dark")
+    ){
+        button.innerHTML = "☀️";
+    }
+    else{
+        button.innerHTML = "🌙";
+    }
+}
+
+
+/* SEARCH DEMONSTRATION */
+
+function searchDonor(){
+
+    const blood =
+        document.getElementById("searchBlood").value;
+
+    const city =
+        document.getElementById("searchCity").value;
+
+    if(blood === ""){
+
+        showToast(
+            "⚠ Please select a blood group."
+        );
+
+        return;
+    }
+
+    const results =
+        document.getElementById("results");
+
+    const title =
+        document.getElementById("resultTitle");
+
+    title.innerHTML =
+        "Available " +
+        blood +
+        " Donors" +
+        (city ? " near " + city : "");
+
+    results.style.display = "block";
+
+    results.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+
+}
+
+
+/* REGISTRATION DEMONSTRATION */
+
+function registerDonor(){
+
+    const name =
+        document.getElementById("donorName").value;
+
+    const blood =
+        document.getElementById("donorBlood").value;
+
+    const city =
+        document.getElementById("donorCity").value;
+
+    const phone =
+        document.getElementById("donorPhone").value;
+
+    if(
+        name === "" ||
+        blood === "" ||
+        city === "" ||
+        phone === ""
+    ){
+
+        showToast(
+            "⚠ Please complete all donor details."
+        );
+
+        return;
+    }
+
+    showToast(
+        "✓ Demo registration completed for " +
+        name +
+        "."
+    );
+
+}
+
+
+/* TOAST MESSAGE */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerHTML = message;
+
+    toast.classList.add("show");
+
+    setTimeout(function(){
+
+        toast.classList.remove("show");
+
+    },3000);
+
+}
+
+</script>
+
+</body>
+</html>
